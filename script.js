@@ -177,8 +177,6 @@ function getWeather(event) {
                 todaysWeatherEl.addClass("border border-5 p-5");
                 //create title for city name
                 var cityNameTitleEl = $("<h2>");
-                // cityNameLowerCase = cityName.slice(1, cityName.length).toLowerCase();
-                // cityNameUpperCase = cityName[0].toUpperCase();
                 cityNameTitleEl.text(cityName);
                 todaysWeatherEl.append(cityNameTitleEl)
                 //create element for today's date
