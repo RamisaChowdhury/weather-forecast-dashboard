@@ -207,45 +207,47 @@ function getWeather(event) {
                 todaysWindSpeedEl.text("Wind Speed: " + todaysWindSpeed + "ms⁻¹");
                 todaysWeatherEl.append(todaysWindSpeedEl);
 
-            }).then(function (data) {
-                for (var i = 1; i <= 5; i++) {
-                    //Get date
-                    date = dayjs().add(i, 'days').format("DD/MM/YYYY");
-                    var dateEl = $("<p>").text(date).addClass("mx-auto pt-3").css({"font-weight":"bolder", "font-size":"14pt"})
-                    
-                    //Get temp for each day
-                    temp = data.daily[i].main.temp;
-                    var tempEl = $("<p>").text("Temperature: " + temp + "°C");
-    
-                    //Get weather icon for each day
-                    icon = data.daily[i].weather[0].icon
-                    var iconEl = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + icon + ".png");
-    
-                    //Get wind speed for each day
-                    wind = data.daily[i].wind.speed
-                    var windEl = $("<p>").text("Wind Speed: " + wind + "ms⁻¹");
-    
-                    //Get humidity for each day
-                    humidity = data.daily[i].main.humidity;
-                    var humidityEl = $("<p>").text("Humidity: " + humidity + "%");
-    
-                    //Create a card for each day
-                    var dayCard = $("<div>").addClass("card col-lg-2 mx-auto");
-                    var dayCardBody = $("<div>").addClass("card-body mx-auto");
-    
-                    //Create a div within the card
-                    dayCard.append(dateEl, dayCardBody);
-    
-                    //Add info to card body
-                    dayCardBody.append(iconEl, tempEl, windEl, humidityEl);
-    
-                    //Add card to forecast in body
-                    forecastEl.append(dayCard);
-                };
-            });
-        return;
-    };
-}
+                //5 day forecast
+                var forecastEl = $("#forecast");
+                var forecastTitleEl = $("<h2>");
+                forecastTitleEl.text("5-day Forecast").addClass("py-3")
+                forecastEl.append(forecastTitleEl);
+                var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=metric" + "&appid=" + key;
+                fetch(forecastUrl)
+                    .then(function (response) {
+                        return response.json();
+                        }).then(function (data) {
+                    for (var i = 1; i <= 5; i++) {
+                        //Get date
+                        date = dayjs().add(i, 'days').format("DD/MM/YYYY");
+                        var dateEl = $("<p>").text(date).addClass("mx-auto pt-3").css({"font-weight":"bolder", "font-size":"14pt"})  
+                        //Get temp for each day
+                        temp = data.list[i].main.temp;
+                        var tempEl = $("<p>").text("Temperature: " + temp + "°C")
+                        //Get weather icon for each day
+                        icon = data.list[i].weather[0].icon
+                        var iconEl = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + icon + ".png");
+                        //Get wind speed for each day
+                        wind = data.list[i].wind.speed
+                        var windEl = $("<p>").text("Wind Speed: " + wind + "ms⁻¹");
+                        //Get humidity for each day
+                        humidity = data.list[i].main.humidity;
+                        var humidityEl = $("<p>").text("Humidity: " + humidity + "%");
+                        //Create a card for each day
+                        var dayCard = $("<div>").addClass("card col-lg-2 mx-auto");
+                        var dayCardBody = $("<div>").addClass("card-body mx-auto");
+                        //Create a div within the card
+                        dayCard.append(dateEl, dayCardBody);
+                        //Add info to card body
+                        dayCardBody.append(iconEl, tempEl, windEl, humidityEl);
+                        //Add card to forecast in body
+                        forecastEl.append(dayCard);
+                    };
+                });
+            return;
+        });
+    }
+};
 
 //Functions and JQuery listener
 showSearchHistory();
